@@ -2,10 +2,11 @@
 #
 #Osman Elias 1/12/2024
 
-from app import db  # Import 'db' from your Flask app
+from extensions import db  # Import 'db' from extensions.py
 from werkzeug.security import generate_password_hash, check_password_hash
+from flask_login import UserMixin  # Import UserMixin
 
-class User(db.Model):
+class User(UserMixin, db.Model):  # Inherit from UserMixin
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)

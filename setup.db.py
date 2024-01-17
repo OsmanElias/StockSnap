@@ -2,9 +2,11 @@
 #
 #Osman Elias 1/12/2024
 
-from app import db  # app and db are defined in app.py
-from models import User, OtherModel
-from .. import app  # Import all models
+from app import create_app, db
+from models import User # Import all necessary models
+
+app = create_app()  # Create an instance of the Flask app
 
 with app.app_context():
-    db.create_all()
+    db.create_all()  # Create database tables
+    
