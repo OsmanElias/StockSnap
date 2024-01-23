@@ -11,7 +11,7 @@ from models import User
 def create_app(config_class=DevelopmentConfig):
     app = Flask(__name__)
     app.config.from_object(config_class)
-    app.config['JWT_SECRET_KEY'] = os.environ.get('JWT_SECRET_KEY', 'fallback-secret-key')
+    
 
     db.init_app(app)
     jwt.init_app(app)

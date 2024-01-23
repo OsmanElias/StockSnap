@@ -7,7 +7,8 @@ import os
 class Config:
     # Base configuration settings
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-    SECRET_KEY = os.environ.get('SECRET_KEY') or 'fallback-secret-key'
+    SECRET_KEY = os.environ.get('SECRET_KEY')
+    JWT_SECRET_KEY = os.environ.get('JWT_SECRET_KEY')
     
 
 class TestConfig(Config):
@@ -17,5 +18,7 @@ class TestConfig(Config):
 
 class DevelopmentConfig(Config):
     SQLALCHEMY_DATABASE_URI = 'sqlite:///yourdatabase.db'
+
+
     
 
