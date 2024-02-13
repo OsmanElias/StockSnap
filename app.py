@@ -1,6 +1,6 @@
 from flask import Flask, jsonify, request, render_template, redirect, url_for
 from extensions import db, jwt, login_manager  # Import from extensions.py
-from flask_login import login_user, login_required, logout_user, current_user
+from flask_login import current_user, login_user, login_required, logout_user 
 import os
 from config import DevelopmentConfig
 from stock_utils import get_real_time_stock_data, get_stock_chart_data
@@ -24,10 +24,12 @@ def create_app(config_class=DevelopmentConfig):
     
     @app.route('/')
     def home():
-        return "Hello, Flask!"
+        return render_template("index.html")
 
     @app.route('/login', methods=['GET', 'POST'])
     def login():
+        if current_user.is_authenticated: #Checking for current user
+            return redirect(url_for('home'))
         if request.method == 'POST':
             username = request.form.get('username')
             password = request.form.get('password')
@@ -47,14 +49,21 @@ def create_app(config_class=DevelopmentConfig):
     
     @app.route('/register', methods=['GET', 'POST'])
     def register():
+        if current_user.is_authenticated:
+            return redirect(url_for('home'))
         if request.method == 'POST':
             username = request.form.get('username')
             email = request.form.get('email')
             password = request.form.get('password')
 
-            existing_user = User.query.filter_by(username=username).first()
-            if existing_user:
-                return 'User already exists'
+             # Check if the username or email address already exists in the database
+            existing_username = User.query.filter_by(username=username).first()
+            existing_email = User.query.filter_by(email=email).first()
+        
+            if existing_username:
+                return 'Username is already in use. Please choose a different one.'
+            elif existing_email:
+                return 'Email address is already in use. Please choose a different one.'
 
             new_user = User(username=username, email=email)
             new_user.set_password(password)
